@@ -23,7 +23,7 @@ const MOBILE_USERAGENT =
  * APIs that are able to handle web components and PWAs.
  */
 export class Renderer {
-    private browser: puppeteer.Browser;
+    public browser: puppeteer.Browser;
     private config: Config;
 
     constructor(browser: puppeteer.Browser, config: Config) {
