@@ -92,6 +92,9 @@ export class Rendertron {
     }
 
     this.app.use(
+        route.get('/submitpassword/:url(.*)', this.handleSubmitPassword.bind(this))
+    );
+    this.app.use(
       route.get('/render/:url(.*)', this.handleRenderRequest.bind(this))
     );
     this.app.use(
@@ -170,6 +173,29 @@ export class Rendertron {
     ctx.body = serialized.content;
   }
 
+  async handleSubmitPassword(ctx: Koa.Context, url: string) {
+    if (!this.renderer) {
+        throw new Error('No renderer initalized yet.');
+    }
+    const parsedFromurl = ctx.originalUrl.split('password=');
+    let passwordFromUrl = '';
+    if (parsedFromurl && Array.isArray(parsedFromurl)) {
+        passwordFromUrl = parsedFromurl[parsedFromurl.length - 1];
+    }
+    const page = await this.renderer.browser.newPage();
+    await page.goto(url);
+    await page.type('input[name=password]', passwordFromUrl);
+    await Promise.all([
+        page.click('button[type=submit]'),
+        page.waitForNavigation({ waitUntil: 'networkidle0' }),
+    ]);
+    const evaluateResult = (await page.content()) as string;
+    ctx.set('Content-Type', 'text/html; charset=utf-8');
+    ctx.body = evaluateResult;
+    ctx.status = 200;
+    return true;
+  }
+    
   async handleScreenshotRequest(ctx: Koa.Context, url: string) {
     if (!this.renderer) {
       throw new Error('No renderer initalized yet.');
