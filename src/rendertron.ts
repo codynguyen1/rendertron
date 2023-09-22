@@ -185,10 +185,8 @@ export class Rendertron {
     const page = await this.renderer.browser.newPage();
     await page.goto(url);
     await page.type('input[name=password]', passwordFromUrl);
-    await Promise.all([
-        page.click('button[type=submit]'),
-        page.waitForNavigation({ waitUntil: 'networkidle0' }),
-    ]);
+    await page.click('button[type=submit]');
+    await page.waitForTimeout(5000);
     const evaluateResult = (await page.content()) as string;
     ctx.set('Content-Type', 'text/html; charset=utf-8');
     ctx.body = evaluateResult;
