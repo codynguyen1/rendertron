@@ -103,7 +103,7 @@ export class Renderer {
         });
 
         //if (isMobile) {
-            page.setUserAgent(MOBILE_USERAGENT);
+        page.setUserAgent(MOBILE_USERAGENT);
         //}
 
         if (timezoneId) {
@@ -152,9 +152,15 @@ export class Renderer {
             } else if (assetUrl.includes('shop_events_listener') || assetUrl.includes('.well-known') || assetUrl.includes('web-pixel')) {
                 // Other exception to avoid
                 interceptedRequest.abort();
-            }
-            else {
-                console.log('interceptedRequestinterceptedRequest', requestUrl, interceptedRequest.url());
+            } else if ((interceptedRequest.resourceType() !== 'document') &&
+                assetUrl &&
+                (!assetUrl.includes('tapita') || assetUrl.includes('polyfill') || assetUrl.includes('instantpage')) &&
+                !assetUrl.includes('theme.js') &&
+                !assetUrl.includes('/vendor')
+            ) {
+                interceptedRequest.abort();
+            } else {
+                console.log('interceptedRequestinterceptedRequestA', requestUrl, interceptedRequest.url());
                 interceptedRequest.continue();
             }
         });
