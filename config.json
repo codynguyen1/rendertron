@@ -1,1 +1,1 @@
-{"port": 8070,"closeBrowser": true,"timeout": 20000}
+{"port": 8070,"closeBrowser": false,"timeout": 30000,"cacheConfig": {"cacheMaxEntries": -1, "cacheDurationMinutes": 2880} ,"reqHeaders": {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36", "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36"}}
