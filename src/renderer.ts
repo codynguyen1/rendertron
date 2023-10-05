@@ -155,11 +155,14 @@ export class Renderer {
                 assetUrl &&
                 (!assetUrl.includes('tapita') || assetUrl.includes('polyfill') || assetUrl.includes('instantpage')) &&
                 !assetUrl.includes('theme.js') &&
+                !assetUrl.includes('cdn/wpm') &&
+                !assetUrl.includes('d3lks6njuyuuik.cloudfront') &&
                 !assetUrl.includes('/vendor')
             ) {
+                console.log('abbortingA', assetUrl);
                 interceptedRequest.abort();
             } else {
-                console.log('interceptedRequestinterceptedRequestA', requestUrl, interceptedRequest.url());
+                console.log('interceptedRequestinterceptedRequestA1', requestUrl, interceptedRequest.url());
                 interceptedRequest.continue();
             }
         });
