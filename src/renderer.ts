@@ -151,16 +151,6 @@ export class Renderer {
             } else if (assetUrl.includes('shop_events_listener') || assetUrl.includes('.well-known') || assetUrl.includes('web-pixel')) {
                 // Other exception to avoid
                 interceptedRequest.abort();
-            } else if ((interceptedRequest.resourceType() !== 'document') &&
-                assetUrl &&
-                (!assetUrl.includes('tapita') || assetUrl.includes('polyfill') || assetUrl.includes('instantpage')) &&
-                !assetUrl.includes('theme.js') &&
-                !assetUrl.includes('cdn/wpm') &&
-                !assetUrl.includes('d3lks6njuyuuik.cloudfront') &&
-                !assetUrl.includes('/vendor')
-            ) {
-                console.log('abbortingA', assetUrl);
-                interceptedRequest.abort();
             } else {
                 console.log('interceptedRequestinterceptedRequestA1', requestUrl, interceptedRequest.url());
                 interceptedRequest.continue();
