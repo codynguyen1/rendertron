@@ -8,10 +8,11 @@ import path from 'path';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import url from 'url';
+import { request } from 'gaxios';
 
 import { Renderer, ScreenshotError } from './renderer';
 import { Config, ConfigManager } from './config';
-
+  
 /**
  * Rendertron rendering service. This runs the server which routes rendering
  * requests through to the renderer.
@@ -109,6 +110,9 @@ export class Rendertron {
                 this.handleScreenshotRequest.bind(this)
             )
         );
+        this.app.use(
+            route.get('/statuscode/:url(.*)', this.getStatusCode.bind(this))
+        )
 
         return this.app.listen(+this.port, this.host, () => {
             console.log(`Listening on port ${this.port}`);
@@ -196,7 +200,25 @@ export class Rendertron {
         ctx.status = 200;
         return true;
     }
-
+    async getStatusCode(ctx: Koa.Context, url: string) {
+        // SAMPLE URL https://httpstat.us/500?sleep=3000
+        let result;
+        try {
+            result = await request({
+                url,
+                validateStatus: () => true,
+                timeout: 3000,
+            });
+        } catch (err) {
+            // FAKE time out header
+            result = {status: '504'}
+        }
+        const status = result ? result.status || 500 : 500;
+        ctx.body = { status };
+        ctx.status = 200;
+        return true;
+    }
+    
     async handleScreenshotRequest(ctx: Koa.Context, url: string) {
         if (!this.renderer) {
             throw new Error('No renderer initalized yet.');
