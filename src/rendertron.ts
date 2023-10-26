@@ -211,6 +211,7 @@ export class Rendertron {
             });
         } catch (err) {
             // FAKE time out header
+            console.log('Status error: ', err);
             result = {status: '504'}
         }
         const status = result ? result.status || 500 : 500;
