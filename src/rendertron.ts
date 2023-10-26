@@ -203,10 +203,11 @@ export class Rendertron {
     async getStatusCode(ctx: Koa.Context, url: string) {
         // SAMPLE URL https://httpstat.us/500?sleep=3000
         let result;
-        console.log('url to request: ', url);
         try {
+            const parsedUrl = new URL(url);
             result = await request({
-                url: url,
+                url: parsedUrl.pathname + parsedUrl.search,
+                baseURL: parsedUrl.origin,
                 validateStatus: () => true,
                 timeout: 3000,
             });
