@@ -216,7 +216,7 @@ export class Rendertron {
             result = await request(requestOptions);
             if (result && result?.request?.responseURL && (result?.request?.responseURL !== url)) {
                 redirect_count = 1;
-                requestOptions.maxRedirects = 3;
+                requestOptions.maxRedirects = 2;
                 try {
                     result = await request(requestOptions);
                 } catch (err) {
