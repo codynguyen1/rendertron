@@ -203,21 +203,34 @@ export class Rendertron {
     async getStatusCode(ctx: Koa.Context, url: string) {
         // SAMPLE URL https://httpstat.us/500?sleep=3000
         let result;
+        let redirect_count = 0;
         try {
             const parsedUrl = new URL(url);
-            result = await request({
+            const requestOptions = {
                 url: parsedUrl.pathname + parsedUrl.search,
                 baseURL: parsedUrl.origin,
                 validateStatus: () => true,
                 timeout: 3000,
-            });
+                maxRedirects: 10
+            }
+            result = await request(requestOptions);
+            if (result && result?.request?.responseURL && (result?.request?.responseURL !== url)) {
+                redirect_count = 1;
+                requestOptions.maxRedirects = 3;
+                try {
+                    result = await request(requestOptions);
+                } catch (err) {
+                    console.log('Status error: ', err);
+                    redirect_count = 3;
+                }
+            }
         } catch (err) {
             // FAKE time out header
             console.log('Status error: ', err);
             result = {status: '504'}
         }
         const status = result ? result.status || 500 : 500;
-        ctx.body = { status };
+        ctx.body = { status, redirect_count };
         ctx.status = 200;
         return true;
     }
