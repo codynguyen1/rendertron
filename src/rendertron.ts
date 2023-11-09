@@ -204,6 +204,7 @@ export class Rendertron {
         // SAMPLE URL https://httpstat.us/500?sleep=3000
         let result;
         let redirect_count = 0;
+        let response_url = '';
         try {
             const parsedUrl = new URL(url);
             const requestOptions = {
@@ -217,6 +218,7 @@ export class Rendertron {
             if (result && result?.request?.responseURL && (result?.request?.responseURL !== url)) {
                 redirect_count = 1;
                 requestOptions.maxRedirects = 2;
+                response_url = result?.request?.responseURL;
                 try {
                     result = await request(requestOptions);
                 } catch (err) {
@@ -230,7 +232,7 @@ export class Rendertron {
             result = {status: '504'}
         }
         const status = result ? result.status || 500 : 500;
-        ctx.body = { status, redirect_count };
+        ctx.body = { status, redirect_count, response_url };
         ctx.status = 200;
         return true;
     }
