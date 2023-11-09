@@ -232,7 +232,12 @@ export class Rendertron {
         } catch (err) {
             // FAKE time out header
             console.log('Status error: ', err);
-            result = {status: '504'}
+            if (err && err?.message && err.message.includes && err.message.includes('aximum redirect reached at')) {
+                redirect_count = 11;
+                result = { status: '301' }
+                response_url = url;
+            } else 
+                result = {status: '504'}
         }
         const status = result ? result.status || 500 : 500;
         ctx.body = { status, redirect_count, response_url, url };
