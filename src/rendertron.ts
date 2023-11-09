@@ -215,7 +215,10 @@ export class Rendertron {
                 maxRedirects: 10
             }
             result = await request(requestOptions);
-            if (result && result?.request?.responseURL && (result?.request?.responseURL !== url)) {
+            if (result && result?.request?.responseURL &&
+                result?.request?.responseURL !== url &&
+                result?.request?.responseURL !== (url + '/') &&
+                (result?.request?.responseURL + '/') !== url) {
                 redirect_count = 1;
                 requestOptions.maxRedirects = 2;
                 response_url = result?.request?.responseURL;
@@ -232,7 +235,7 @@ export class Rendertron {
             result = {status: '504'}
         }
         const status = result ? result.status || 500 : 500;
-        ctx.body = { status, redirect_count, response_url };
+        ctx.body = { status, redirect_count, response_url, url };
         ctx.status = 200;
         return true;
     }
