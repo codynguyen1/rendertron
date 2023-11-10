@@ -212,7 +212,8 @@ export class Rendertron {
                 baseURL: parsedUrl.origin,
                 validateStatus: () => true,
                 timeout: 3000,
-                maxRedirects: 10
+                maxRedirects: 10,
+                headers: []
             }
             result = await request(requestOptions);
             if (result && result?.request?.responseURL &&
