@@ -143,16 +143,37 @@ export class Renderer {
                 !assetUrl.includes(tapitaCndDOmain)) {
                 // from other domain
                 interceptedRequest.abort();
-            } else if (['image', 'stylesheet', 'font'].indexOf(interceptedRequest.resourceType()) !== -1) {
+            } else if (assetUrl.includes('.css') ||
+                assetUrl.includes('.ttf') ||
+                assetUrl.includes('.woff') ||
+                assetUrl.includes('.otf') ||
+                assetUrl.includes('.gif') ||
+                assetUrl.includes('.jpg') ||
+                assetUrl.includes('.svg') ||
+                assetUrl.includes('.png') ||
+                assetUrl.includes('.gif') ||
+                assetUrl.includes('.json') ||
+                assetUrl.includes('.webp')
+            ) {
                 // asset we dont need
                 interceptedRequest.abort();
             } else if (this.restrictRequest(interceptedRequest.url())) {
                 interceptedRequest.abort();
             } else if (assetUrl.includes('shop_events_listener') || assetUrl.includes('.well-known') || assetUrl.includes('web-pixel')) {
-                // Other exception to avoid
+                // Other exception to avoid 
+                interceptedRequest.abort();
+            } else if ((
+                assetUrl.includes('.js')) &&
+                assetUrl &&
+                (!assetUrl.includes('tapita') || assetUrl.includes('polyfill') || assetUrl.includes('instantpage')) &&
+                !assetUrl.includes('theme.js') &&
+                !assetUrl.includes('cdn/wpm') &&
+                !assetUrl.includes('d3lks6njuyuuik.cloudfront') &&
+                !assetUrl.includes('/vendor')
+            ) {
                 interceptedRequest.abort();
             } else {
-                console.log('interceptedRequestinterceptedRequestA1', requestUrl, interceptedRequest.url());
+                console.log('interceptedRequestinterceptedRequestA1', requestUrl);
                 interceptedRequest.continue();
             }
         });
