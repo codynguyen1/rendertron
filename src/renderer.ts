@@ -136,7 +136,10 @@ export class Renderer {
 
         }
         const tapitaCndDOmain = 'd3lks6njuyuuik.cloudfront.net';
-        page.on('request', (interceptedRequest) => {
+        /* No JS on page that has JS content blocker */
+        if (requestUrl.includes('thefuturerocks.com'))
+            page.setJavaScriptEnabled(false);
+        page.on('request', async (interceptedRequest) => {
             const assetUrl = interceptedRequest.url();
             if (rdomain && assetUrl && assetUrl.includes('http') && !assetUrl.includes(rdomain) &&
                 !assetUrl.includes('tapita') &&
@@ -173,7 +176,6 @@ export class Renderer {
             ) {
                 interceptedRequest.abort();
             } else {
-                console.log('interceptedRequestinterceptedRequestA1', requestUrl);
                 interceptedRequest.continue();
             }
         });
