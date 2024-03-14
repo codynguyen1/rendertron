@@ -48,7 +48,8 @@ export class Renderer {
     async serialize(
         requestUrl: string,
         isMobile: boolean,
-        timezoneId?: string
+        timezoneId?: string,
+        blockJS?: any
     ): Promise<SerializedResponse> {
         /**
          * Executed on the page after the page has loaded. Strips script and
@@ -126,6 +127,11 @@ export class Renderer {
         page.evaluateOnNewDocument('ShadyCSS = {shimcssproperties: true}');
 
         await page.setRequestInterception(true);
+        const tapitaCndDOmain = 'd3lks6njuyuuik.cloudfront.net';
+        /* No JS on page that has JS content blocker */
+        if ((blockJS === '1') || (blockJS === 1)) {
+            page.setJavaScriptEnabled(false);}
+        requestUrl = requestUrl.replace('?blockJS=1', '').replace('&blockJS=1', '');
         let rdomain = '';
         try {
             let domainObj = (new URL(requestUrl));
@@ -135,10 +141,6 @@ export class Renderer {
         } catch (err) {
 
         }
-        const tapitaCndDOmain = 'd3lks6njuyuuik.cloudfront.net';
-        /* No JS on page that has JS content blocker */
-        if (requestUrl.includes('thefuturerocks.com'))
-            page.setJavaScriptEnabled(false);
         page.on('request', async (interceptedRequest) => {
             const assetUrl = interceptedRequest.url();
             if (rdomain && assetUrl && assetUrl.includes('http') && !assetUrl.includes(rdomain) &&

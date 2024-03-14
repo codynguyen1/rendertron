@@ -159,11 +159,11 @@ export class Rendertron {
         }
 
         const mobileVersion = 'mobile' in ctx.query ? true : false;
-
         const serialized = await this.renderer.serialize(
             url,
             mobileVersion,
-            ctx.query.timezoneId
+            ctx.query.timezoneId,
+            ctx.query.blockJS || ''
         );
 
         for (const key in this.config.headers) {
