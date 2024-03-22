@@ -173,6 +173,7 @@ export class Renderer {
                 (!assetUrl.includes('tapita') || assetUrl.includes('polyfill') || assetUrl.includes('instantpage')) &&
                 !assetUrl.includes('theme.js') &&
                 !assetUrl.includes('cdn/wpm') &&
+                !assetUrl.includes('/pwa/') &&
                 !assetUrl.includes('d3lks6njuyuuik.cloudfront') &&
                 !assetUrl.includes('/vendor')
             ) {
