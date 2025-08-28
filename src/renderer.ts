@@ -63,6 +63,7 @@ export class Renderer {
             for (const e of Array.from(elements)) {
                 const content = e.innerHTML || "";
                 if (
+                    content.includes('gtm.js') ||
                     content.includes('googletagmanager.com') ||
                     content.includes('dataLayer')
                 ) {
