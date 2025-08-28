@@ -61,6 +61,13 @@ export class Renderer {
                 'script:not([type]), script[type*="javascript"], script[type="module"], link[rel=import]'
             );
             for (const e of Array.from(elements)) {
+                const content = e.innerHTML || "";
+                if (
+                    content.includes('googletagmanager.com') ||
+                    content.includes('dataLayer')
+                ) {
+                    continue; // keep GTM inline snippet
+                }
                 e.remove();
             }
         }
